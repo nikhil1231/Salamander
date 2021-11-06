@@ -1,0 +1,6 @@
+config.ini
+__pycache__
+.vscode
+TODO.txt
+plots
+data
