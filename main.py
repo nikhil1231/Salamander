@@ -7,9 +7,9 @@ import time
 
 cfg = config.Config("config.ini")
 
-DEV = False
+DEV = cfg.get("dev")
 REFRESH_TIMEOUT = 1
-BNB_AMOUNT = 10 / 600
+BNB_AMOUNT = cfg.get("trade_value") / 600
 
 def start_scheduler(interval=1):
     cease_continuous_run = threading.Event()
@@ -26,7 +26,7 @@ def start_scheduler(interval=1):
     return cease_continuous_run
 
 def approve_token(token):
-  bsc.approve_token(token, cfg.get('private'))
+  bsc.approve_token(token, cfg.get('private'), dev=DEV)
   return schedule.CancelJob
 
 def sell_token(token, ratio):
@@ -47,7 +47,7 @@ def check_new_coins(max_coins=1):
     return
 
   for new_coin in new_coins:
-    execute_strategy(new_coin['tickers'][0]['base'])
+    execute_strategy(new_coin)
 
 
 if __name__ == '__main__':
