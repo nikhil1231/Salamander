@@ -40,10 +40,10 @@ def execute_strategy(token):
 
   schedule.every(30).minutes.do(sell_token, token=token, ratio=1.0)
 
-def check_new_coins(max_coins=1):
+def check_new_coins(max_coins=1, initial=False):
   new_coins = get_new_coins(chains=['BSC'], max_coins=max_coins)
 
-  if len(new_coins) == 0:
+  if len(new_coins) == 0 or initial:
     return
 
   for new_coin in new_coins:
@@ -52,5 +52,7 @@ def check_new_coins(max_coins=1):
 
 if __name__ == '__main__':
   start_scheduler()
+
+  check_new_coins(initial=True)
 
   schedule.every(REFRESH_TIMEOUT).seconds.do(check_new_coins)
