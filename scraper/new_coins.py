@@ -27,26 +27,28 @@ def toApi(new_coins):
   return [get_coin_address(id) for id in coin_ids]
 
 def get_new_coins(chains=[], max_coins=3, force_fresh=False):
-  old_coin_name = "" if force_fresh else read_latest_coin()
+  old_coin_ticker = "" if force_fresh else read_latest_coin()
 
   new_coins = get_parsed_recent_coins()
-  new_coin_names = [coin.name for coin in new_coins]
+  new_coin_tickers = [coin.ticker for coin in new_coins]
 
   res = new_coins
 
-  for i, name in enumerate(new_coin_names):
-    if name == old_coin_name:
+  for i, ticker in enumerate(new_coin_tickers):
+    if ticker == old_coin_ticker:
       res = new_coins[:i]
       break
 
   res = filter_coins(res, chains, max_coins)
 
-  store_latest_coin(new_coins[0])
-
   if len(res) == 0:
     return []
 
-  return toApi(res)
+  api_coins = toApi(res)
+
+  store_latest_coin(api_coins[0])
+
+  return api_coins
 
 if __name__ == "__main__":
   print(get_new_coins())
