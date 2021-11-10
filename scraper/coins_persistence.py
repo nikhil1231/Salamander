@@ -14,4 +14,4 @@ def read_latest_coin():
 def store_latest_coin(coin):
   with open(COINS_PATH, 'w', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow([coin.name, coin.ticker, coin.chain])
+    writer.writerow([coin['symbol']])
